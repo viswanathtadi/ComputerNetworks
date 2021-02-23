@@ -181,7 +181,6 @@ void userf(int sockfd,char* user,char* userfile)
 			strcat(line,mess);
 			strcat(buf,line);
 			
-			printf("%s",in);
 			
 			FILE* rfp = fopen(rfile,"r");
 			bzero(out,MAX);
