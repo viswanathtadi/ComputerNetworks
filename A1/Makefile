@@ -6,3 +6,7 @@ clean:
 		rm server
 		rm client
 
+cleane:
+		rm server
+		rm client
+		rm *.txt
