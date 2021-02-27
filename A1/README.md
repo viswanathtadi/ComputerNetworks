@@ -9,8 +9,8 @@ Instructions to setup environment-
      
 2)Run "make" in terminal to build essential executables.
   This will create server and client.
-  Run "./server" and "./client" on seperate terminals.
-  Note:Run "./server" first and they will always use port number 40,000.
+  Run "./emailserver portnum" and "./client ipaddr portnum" on seperate terminals.
+  Note:Run "./emailserver" first.
 
 3)	Navigate to client terminal.
 	You will get messages that client is connected to server.

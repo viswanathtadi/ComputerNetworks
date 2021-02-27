@@ -1,12 +1,12 @@
 all:
-		gcc server.c -o server 
-		gcc client.c -o client
-		echo Run ./server and ./client on different terminals
+		gcc server.c -o emailserver 
+		gcc client.c -o emailclient
+		echo Run ./emailserver port_num and ./emailclient ip_addr port_num on different terminals
 clean:
-		rm server
-		rm client
+		rm emailserver
+		rm emailclient
 
 cleane:
-		rm server
-		rm client
+		rm emailserver
+		rm emailclient
 		rm *.txt

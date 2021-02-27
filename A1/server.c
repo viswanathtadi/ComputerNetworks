@@ -7,7 +7,6 @@
 #include <sys/types.h> 
 #include <time.h>
 #define MAX 250 
-#define PORT 40000 
 #define SA struct sockaddr 
 
 void substring(char s[], char sub[], int p, int l) {
@@ -277,8 +276,9 @@ void func(int sockfd)
 }
 
 // Driver function 
-int main() 
+int main(int argc,char** argv) 
 { 
+	int PORT = atoi(argv[1]);
 	FILE *fp = fopen("users.txt","r");
 	if(fp==NULL)
 	{
