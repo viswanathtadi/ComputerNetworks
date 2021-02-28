@@ -77,6 +77,7 @@ void userf(int sockfd,char* user,char* userfile)
 	char out[MAX];
 	char buf[MAX];
 	int nmes=i;
+	int init_nmes=nmes;
 	bzero(out,MAX);
 	strcpy(out,"User has xy messages in his/her inbox");
 	out[9]=(char)(nmes/10 + 48);
@@ -103,6 +104,7 @@ void userf(int sockfd,char* user,char* userfile)
 					i++;i=i%MAX;
 				}
 				strcpy(out,lines[i]);
+				out[strlen(out)-1]='\0';out[strlen(out)-2]='\0';
 				out[strlen(out)-1]='\0';out[strlen(out)-2]='\0';
 				for(int i=0;i<MAX;i++)if(out[i]=='\t')out[i]='\n';
 				for(int i=MAX-1;i>=0;i--)if(out[i]=='\n'){out[i]='\0';break;}
@@ -183,7 +185,17 @@ void userf(int sockfd,char* user,char* userfile)
 			
 			FILE* rfp = fopen(rfile,"r");
 			bzero(out,MAX);
-			if(rfp!=NULL)
+			if(strcmp(user,receiver)==0)
+			{
+				fclose(rfp);
+				buf[strlen(buf)]='\n';
+				strcpy(lines[init_nmes],buf);
+				init_nmes++;
+				nmes++;
+				strcpy(out,"Message sent");
+				write(sockfd,out,sizeof(out));
+			}
+			else if(rfp!=NULL)
 			{
 				fclose(rfp);
 				rfp = fopen(rfile,"a");
@@ -211,8 +223,11 @@ void userf(int sockfd,char* user,char* userfile)
 	for(int i=0;i<MAX;i++)
 	{
 		if(lines[i][0]!='\0')
+		{
 			fputs(lines[i],fp);
+		}
 	}
+	fclose(fp);
 	return;
 }
 void func(int sockfd)

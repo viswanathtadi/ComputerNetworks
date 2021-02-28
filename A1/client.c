@@ -38,6 +38,7 @@ void currentUser(int sockfd)
 			write(sockfd,out,sizeof(out));
 			bzero(in,sizeof(in));
 			read(sockfd,in,sizeof(in));
+			int t=strlen(in);
 			printf("%s",in);
 		}
 		else if(cmd[0]=='D' && cmd[1]=='e')
