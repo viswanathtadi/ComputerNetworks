@@ -10,7 +10,7 @@ int checkend(char* s)
 	int n=strlen(s);
 	for(int i=0;i<n-2;i++)
 	{
-		if(s[i]=='x' && s[i+1]=='x' && s[i+2]=='x')
+		if(s[i]=='#' && s[i+1]=='#' && s[i+2]=='#')
 		return 1;
 	}
 	return 0;

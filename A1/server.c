@@ -46,22 +46,23 @@ void addu(int sockfd,char* in)
 	substring(in,user,5,strlen(in)-5);
 	strcpy(userfile,user);
 	strcat(userfile,".txt");
-	FILE *fp = fopen(user,"r");
+	FILE *fp = fopen(userfile,"r");
 	if(fp==NULL)
 	{
 		strcpy(out,"New user created");
-		write(sockfd,out,sizeof(out));
 		fp = fopen(userfile,"w");
 		fclose(fp);
 		fp = fopen("users.txt","a");
 		fputs(user,fp);
 		fputs("\n",fp);
 		fclose(fp);
+		write(sockfd,out,sizeof(out));
 	}
 	else
 	{
 		strcpy(out,"User already exists");
 		write(sockfd,out,sizeof(out));
+		fclose(fp);
 	}
 	return;
 }
