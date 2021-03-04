@@ -105,8 +105,6 @@ void userf(int sockfd,char* user,char* userfile)
 					i++;i=i%MAX;
 				}
 				strcpy(out,lines[i]);
-				out[strlen(out)-1]='\0';out[strlen(out)-2]='\0';
-				out[strlen(out)-1]='\0';out[strlen(out)-2]='\0';
 				for(int i=0;i<MAX;i++)if(out[i]=='\t')out[i]='\n';
 				for(int i=MAX-1;i>=0;i--)if(out[i]=='\n'){out[i]='\0';break;}
 				write(sockfd,out,sizeof(out));
