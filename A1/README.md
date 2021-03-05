@@ -1,5 +1,8 @@
 # Instructions to setup environment-
 
+### References
+- The basic setup for this code is taken from geeksforgeeks.
+
 ### Files in this folder.
 - server.c
 - client.c
