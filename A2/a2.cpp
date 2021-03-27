@@ -105,9 +105,10 @@ int main(int argc,char** argv)
             {
                 phase = CA;
             }
+            int plot=ceil(cwnd);
+            fprintf(outfile,"%d\n",plot);
         }
-        int plot=ceil(cwnd);
-        fprintf(outfile,"%d\n",plot);
     }
     return 0;
+
 }
