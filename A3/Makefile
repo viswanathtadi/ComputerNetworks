@@ -1,0 +1,2 @@
+cleane:
+		@rm *.txt

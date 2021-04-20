@@ -9,7 +9,7 @@ outfile = "outfile-0.txt"
 hi = 1
 lsai = 5
 spfi = 20
-base = 10002
+base = 10010
 seq_num = 0
 
 def minDistance(dist,queue):
@@ -38,6 +38,8 @@ def dijkstra():
                 if dist[u] + graph[u][i] < dist[i]:
                     dist[i] = dist[u] + graph[u][i]
                     parent[i] = u
+    with open(outfile+"-"+str(id)+".txt","a") as f:
+        print("time = ",time.time()-begin_time,file=f)
     for i in range(num_routers):
         if i == id:
             continue
@@ -46,7 +48,8 @@ def dijkstra():
         while cur!=-1:
             path = str(cur)+","+path
             cur = parent[cur]
-        print(i,path,dist[i])
+        with open(outfile+"-"+str(id)+".txt","a") as f:
+            print(i,path,dist[i],file=f)
 
 def do_spf():
     while True:
@@ -69,7 +72,7 @@ def do_lsa():
         for i in neighbours:
             msg += " " + str(i) + " " + str(neighbours[i])
         bytesToSend = str.encode(msg)
-        for i in neighbours:
+        for i in allneighbours:
             addressPort = ("127.0.0.1",base + i) 
             UDPSocket.sendto(bytesToSend, addressPort)
         seq_num += 1
@@ -96,6 +99,7 @@ def do_recv():
         elif msg[0] == "HELLOREPLY":
             neighbours[int(msg[1])] = int(msg[3])
             adj[id][int(msg[1])] = int(msg[3])
+            adj[int(msg[1])][id] = int(msg[3])
         
         elif msg[0] == "LSA":
             srcid = int(msg[1])
@@ -103,11 +107,12 @@ def do_recv():
             if srcid not in neighbour_seqnum or neighbour_seqnum[srcid] < curseqnum:
                 if srcid in neighbour_seqnum:
                     neighbour_seqnum[srcid] = curseqnum
-                for i in range(int(msg[3])//2 +1):
+                for i in range(int(msg[3])):
                     adj[srcid][int(msg[2*i+4])] = int(msg[2*i+5])
+                    adj[int(msg[2*i+4])][srcid] = int(msg[2*i+5])
                 msg = " ".join(msg)
                 bytesToSend = str.encode(msg)
-                for i in neighbours:
+                for i in allneighbours:
                     if i==srcid:
                         continue
                     addressPort = ("127.0.0.1",base + i) 
@@ -132,15 +137,18 @@ curline = f.readline()
 incoming = {}
 neighbours = {}
 neighbour_seqnum = {}
+allneighbours = []
 [num_routers,num_links] = [int(i) for i in curline.split()]
 for i in range(num_links):
     curline = f.readline()
     [inode,onode,l,h] = [int(i) for i in curline.split()]
     if onode == id:
         incoming[inode] = (l,h)
+        allneighbours.append(inode)
     if inode == id:
         neighbours[onode] = int(1e9)
         neighbour_seqnum[onode] = -1
+        allneighbours.append(onode)
 UDPSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPSocket.bind(("127.0.0.1", base+id))
 begin_time = time.time()
