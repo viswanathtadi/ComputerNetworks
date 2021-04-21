@@ -91,6 +91,8 @@ def do_recv():
         if msg[0] == "HELLO":
             recvid = int(msg[1])
             cost = random.randint(incoming[recvid][0],incoming[recvid][1])
+            adj[id][recvid]=cost
+            adj[recvid][id]=cost
             msg = "HELLOREPLY " + str(id) + " " + str(recvid) + " " + str(cost)
             bytesToSend = str.encode(msg)
             addressPort = ("127.0.0.1",base + recvid)
@@ -104,7 +106,7 @@ def do_recv():
         elif msg[0] == "LSA":
             srcid = int(msg[1])
             curseqnum = int(msg[2])
-            if srcid not in neighbour_seqnum or neighbour_seqnum[srcid] < curseqnum:
+            if id!=srcid and neighbour_seqnum[srcid] < curseqnum:
                 if srcid in neighbour_seqnum:
                     neighbour_seqnum[srcid] = curseqnum
                 for i in range(int(msg[3])):
@@ -147,8 +149,9 @@ for i in range(num_links):
         allneighbours.append(inode)
     if inode == id:
         neighbours[onode] = int(1e9)
-        neighbour_seqnum[onode] = -1
         allneighbours.append(onode)
+for i in range(num_routers):
+    neighbour_seqnum[i] = -1
 UDPSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPSocket.bind(("127.0.0.1", base+id))
 begin_time = time.time()

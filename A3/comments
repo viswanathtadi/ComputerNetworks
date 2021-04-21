@@ -1,0 +1,11 @@
+I chose python firstly beacuse there is some string handling to be done in the routing protocol messages.Python makes this easier.
+
+I needed to learn how to send and receive udp messages in python.This is not difficult.
+
+I needed to learn multi-threading in python so as to run multiple processes simultaneously.
+
+I learnt the dijstras algorithm using the resources like gfg.
+
+I studied the ospf algorithm and differnent messaging protocols in it.I implemented the hello,helloreply and lsa packets.
+
+Finally I needed to print the routing table of each router to its corresponding output file.
