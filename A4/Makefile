@@ -1,16 +1,22 @@
+all:
+		@g++ -w -std=c++11 -pthread SenderGbn.cpp -o sgbn 
+		@g++ -w -std=c++11 -pthread ReceiverGbn.cpp -o rgbn
+		@g++ -w -std=c++11 -pthread SenderSR.cpp -o ssrp
+		@g++ -w -std=c++11 -pthread ReceiverSR.cpp -o rsrp
+
 gbn:
-		@g++ -w -std=c++11 -pthread SenderGbn.cpp -o sgn 
+		@g++ -w -std=c++11 -pthread SenderGbn.cpp -o sgbn 
 		@g++ -w -std=c++11 -pthread ReceiverGbn.cpp -o rgbn
 
 sr:
-		@g++ -w -std=c++11 -pthread SenderSR.cpp -o ssr
-		@g++ -w -std=c++11 -pthread ReceiverSR.cpp -o rsr
+		@g++ -w -std=c++11 -pthread SenderSR.cpp -o ssrp
+		@g++ -w -std=c++11 -pthread ReceiverSR.cpp -o rsrp
 
 clean:
 		-@rm sgbn
 		-@rm rgbn
-		-@rm ssr
-		-@rm rsr
+		-@rm ssrp
+		-@rm rsrp
 		
 free:
 		-@fuser -k 11030/udp
@@ -19,7 +25,7 @@ free:
 cleane:
 		-@rm sgbn
 		-@rm rgbn
-		-@rm ssr
-		-@rm rsr
+		-@rm ssrp
+		-@rm rsrp
 		-@rm *.txt
 		-@rm *.png
