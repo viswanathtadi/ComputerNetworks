@@ -90,7 +90,7 @@ map<int,ll> timeReceived;
 
 void myexit()
 {
-    cout<<total_acks<<endl;
+    //cout<<total_acks<<endl;
     exit(0);
 }
 

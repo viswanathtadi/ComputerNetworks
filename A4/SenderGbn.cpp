@@ -23,6 +23,7 @@ using std::chrono::seconds;
 using std::chrono::system_clock;
 std::chrono::high_resolution_clock::time_point start;
 int N=8;
+int rtt_multiplier = 20;
 
 string decToBinary(int n)
 {
@@ -105,8 +106,9 @@ void our_exit()
     cout<<total_transmissions<<" "<<total_acks<<endl;
     cout<<"PacketGenRate       : "<<packetgenrate<<endl;
     cout<<"packetlength        : "<<packetlength<<endl;
-    cout<<"RetransmissionRatio : "<<(1.0*total_transmissions/total_acks)<<endl;
-    cout<<"AverageRTT          : "<<cur_timeout<<endl;
+    if(total_acks!=0)
+        cout<<"RetransmissionRatio : "<<(1.0*total_transmissions/total_acks)<<endl;
+    cout<<"AverageRTT          : "<<cur_timeout/rtt_multiplier<<endl;
     mySend("STOP");
     exit(0);
 }
@@ -173,7 +175,7 @@ void sendPacket()
         if(mypackets.empty())
             continue;
         if((firstsent.find(mypackets[0].first)!=firstsent.end()) && (mypackets[0].first <= windowsize+mybase_packet) && ((mypackets[0].first<10 && (timenow - lastsent[mypackets[0].first] > 100000ll)) ||
-            (mypackets[0].first>=10 && (timenow - lastsent[mypackets[0].first] > cur_timeout)) ))
+            (mypackets[0].first>=10 && (timenow - lastsent[mypackets[0].first] > max(cur_timeout,5000ll))) ))
         { 
             for(int i=0;i<mypackets.size();i++)
             {
@@ -213,14 +215,15 @@ void recvPacket()
                 break;
             }
         }
-        ll timenow = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
-        ll this_rtt = (timenow-firstsent[act_seqnum]);
+      
         if(retransmission[act_seqnum]==0)
         {            
             cout<<"Seq# "<<recv_seqnum<<" Old duplicate packet ack"<<endl;
             lock_packets.unlock();
             continue;
         }
+        ll timenow = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        ll this_rtt = (timenow-firstsent[act_seqnum]);
         if(debug == true)
         {
             cout<<"Seq# "<<recv_seqnum<<" Time generated: "<<time_generated[act_seqnum]/1000<<":"<<time_generated[act_seqnum]%1000<<" RTT:"<<this_rtt<<" Number of attempts:"<<retransmission[act_seqnum]<<endl;
@@ -228,7 +231,7 @@ void recvPacket()
         while(!packets.empty() && packets[0].first <= act_seqnum)
         {
             //cout<<"removing "<<packets[0].first<<endl;
-            cur_timeout = (cur_timeout * total_acks + 2 * this_rtt)/(total_acks+1);
+            cur_timeout = (cur_timeout * total_acks + rtt_multiplier * this_rtt)/(total_acks+1);
             int temp = packets[0].first;
             packets.erase(packets.begin());
             base_packet = temp;
@@ -244,6 +247,7 @@ int main(int argc,char** argv)
 {
     //default values
     start = std::chrono::high_resolution_clock::now();
+    rtt_multiplier = 2;
     debug=false;
     recvip = "127.0.0.1";
     recvport = RPORT;
