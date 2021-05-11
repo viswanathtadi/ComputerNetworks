@@ -9,9 +9,19 @@
 - `Makefile`
 - `README.md`
 - `REPORT.pdf`
+- `scriptgbn.pdf`
+- `scriptsrp.pdf`
 
 ### Generate executables.
 - Run `make` to generate all executables.
+
+### Run pre-configured gbn simulations.
+- Run `python3 scriptgbn.py` to run gbn for given fixed configurations.
+- The code is tested with 11020 receiver port and 11030 sender port.
+
+### Run pre-configured srp simulations.
+- Run `python3 scriptsrp.py` to run srp for given fixed configurations.
+- The code is tested with 11020 receiver port and 11030 sender port.
 
 ### Run gbn simulation.
 - Run `./rgbn -d -e error_rate -p recvport -n maxpackets -w windowsize` and `./sgbn -d -s recvip -p recvport -r packetgenrate -l packetlength -n maxpackets -w windowsize -b buffersize` on different terminals.
